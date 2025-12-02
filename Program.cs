@@ -1,130 +1,122 @@
-﻿/*Практическая работа № 10
-
-Использование принципов ООП
-
-Задание: 
-1.Написать код, показывающий работу 4-ех принципов ООП
-2. В решение добавить проект, реализовать перегрузку методов, операторов и преобразование типов
-3. Реализовать программу, представленную на блок-схеме (отступать от действий, показанных на ней, нельзя)*/
-
-
+﻿using Microsoft.VisualBasic;
 using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Channels;
 
-//Задание 1
-namespace OOP
+namespace NomerTri
 {
-    //Инкапсуляция
-    class Camarero
+
+    public class Start
     {
-        private bool estaListo;
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
 
-        private void Preparar()
+        public Start()
         {
-            Console.WriteLine("Блюдо готовиться");
+            Console.WriteLine("Введите коэфициенты \n");
 
-            estaListo = true;
+            Console.WriteLine("Коэффициент A: ");
+            A = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Блюдо готово");
+            Console.WriteLine("Коэффициент B: ");
+            B = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Коэффициент C: \n");
+            C = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine($"Ваши коэффициенты: A = {A}, B = {B}, C = {C}");
+
         }
+    }
 
-        public void Servicio()
+    public class Aif
+    {
+        public void Proccess(Start start)
         {
-            if (!estaListo)
+            if (start.A == 0)
             {
-                Console.WriteLine("Блюдо не готово");
-                Preparar();
+                AIsNull aIsNull = new AIsNull(start);
             }
-            Console.WriteLine("Ваше жаренные гвозди, сеньор \n");
-            estaListo = false;
-        }
+            else
+            {
+                AIsNotNull aIsNotNull = new AIsNotNull(start);
+            }
 
+        }
     }
 
-    //Наследование и полиморфизм
-    class Pizza
+    public class AIsNull
     {
-        public string Ingredientes { get; set; }
-        public string CookingTime { get; set; }
-
-        public void ToCook()
+        public AIsNull(Start start)
         {
-            Console.WriteLine($"У нас есть пицца с {Ingredientes}. Она будет готова примерно через {CookingTime}");
-        }
+            int A = start.A;
+            int B = start.B;
+            int C = start.C;
 
-        public void Cooking()
-        {
-            Console.WriteLine("Ваша пицца готовиться \n");
+            Console.WriteLine("A is null");
+
+            if (B == 0)
+            {
+                if (start.C == 0)
+                {
+                    Console.WriteLine("X - любое число");
+                }
+                else
+                {
+                    Console.WriteLine("Нет решщения");
+                }
+            }
+            else
+            {
+                int X1 = -C / B;
+                Console.WriteLine($"X1 = {X1}");
+            }
         }
     }
 
-    class Margarita : Pizza
+    public class AIsNotNull
     {
-        public void Order()
+        public AIsNotNull(Start start)
         {
-            Console.WriteLine("Вы выбрали пиццу Маргарита \n");
-        }
+            int A = start.A;
+            int B = start.B;
+            int C = start.C;
 
-        public void Cooking()
-        {
-            Console.WriteLine("Ваша Маргарита готовиться \n");
+            Console.WriteLine("A is not null");
 
-        }
-    }
+            double D = B * B - 4 * A * C;
 
-    //Абстракция
-    abstract class CookingPizza
-    {
-        public abstract void Cook();
-    }
-
-    class CookingMargarita : CookingPizza
-    {
-        public override void Cook()
-        {
-            Console.WriteLine("Начинка для Маргариты выкладывается на тесто");
-        }
-    }
-
-    class Pizzayolo
-    {
-        public void Cook(CookingPizza cookingPizza)
-        {
-            cookingPizza.Cook();
+            if (D > 0)
+            {
+                D = Math.Sqrt(D);
+                double X1 = (-B - D) / 2 * A;
+                double X2 = (-B + D) / 2 * A;
+                Console.WriteLine($"X1 = {X1}, X2 = {X2}");
+            }
+            else
+            {
+                if (D == 0)
+                {
+                    double X1 = -B / 2 * A;
+                    Console.WriteLine($"X1 = {X1}");
+                }
+                else
+                {
+                    Console.WriteLine("Нет решения");
+                }
+            }
         }
     }
 
-
-
-
-
-    class Programm
+    class Program
     {
         static void Main(string[] args)
         {
-            //Инкапсуляция
-            Console.WriteLine("Инкапсуляция: ");
-            Camarero camarero = new Camarero();
-            camarero.Servicio();
-
-            //Наследование
-            Console.WriteLine("Наследование: ");
-            Margarita margarita = new Margarita { Ingredientes = "Томатный соус, сыр", CookingTime = "42 минуты" };
-            margarita.ToCook();
-            margarita.Order();
-
-            //Полиморфизм
-            Console.WriteLine("Полиморфизм: ");
-            Pizza pizza = new Margarita { Ingredientes = "Томатный соус, сыр", CookingTime = "52 минуты" };
-            pizza.Cooking();
-
-            //Абстракция
-            Console.WriteLine("Абстракция: ");
-            Pizzayolo pizzayolo = new Pizzayolo();
-            CookingMargarita cookingMargarita = new CookingMargarita();
-            pizzayolo.Cook(cookingMargarita);
+            Start start = new Start();
+            Aif aif = new Aif();
+            aif.Proccess(start);
+            Console.WriteLine("Конец");
         }
     }
 }
-
-
-
